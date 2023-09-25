@@ -2,14 +2,17 @@ package com.hemebiotech.analytics;
 
 import java.util.*;
 
+/**
+ * Process a list of symptoms (input) and write out the processed list
+ * in a human-readable file (output).
+ *
+ */
 public class AnalyticsCounter {
 
 	private ISymptomReader reader;
 	private ISymptomWriter writer;
 
 	/**
-	 * AnalyticsCounter constructor
-	 *
 	 * Instantiates:
 	 * - a reader, to read symptoms from a file
 	 * - a writer, to write out the processed list of symptoms (list of sorted, counted & unique symptoms)
@@ -23,7 +26,7 @@ public class AnalyticsCounter {
 	}
 
 	/**
-	 * Gets symptoms from input file (ISymptomReader) and stores them in a list
+	 * Gets symptoms from input file (ISymptomReader) and stores them in a list.
 	 *
 	 * @return List of all symptoms (including duplication for each occurrence)
 	 */
@@ -53,20 +56,20 @@ public class AnalyticsCounter {
 	}
 
 	/**
-	 * Sorts (alphabetically) a non-ordered map of symptoms
+	 * Sorts (alphabetically) a non-sorted map of symptoms.
 	 *
-	 * @param symptoms A non-ordered map of symptoms and their occurrence
-	 * @return Key-value paired and sorted (alphabetically) listing of symptoms and their occurrence
+	 * @param symptoms A non-sorted map of symptoms and their occurrence.
+	 * @return Key-value paired and sorted (alphabetically) listing of symptoms and their occurrence. Key is the symptom name, value is the occurrence.
+	 *
 	 */
 	public SortedMap<String, Integer> sortSymptoms(Map<String, Integer> symptoms) {
-		SortedMap<String, Integer> sortedSymptoms = new TreeMap<String, Integer>(symptoms);
-		return sortedSymptoms;
+		return new TreeMap<String, Integer>(symptoms);
 	}
 
 	/**
-	 * Outputs a file with the list of symptoms and their occurrences
+	 * Outputs the list of symptoms and their occurrences in a text-type file.
 	 *
-	 * @param symptoms A map of symptoms and their occurrence
+	 * @param symptoms A map of symptoms and their occurrence.
 	 */
 	public void writeSymptoms(Map<String, Integer> symptoms) {
 		this.writer.writeSymptoms(symptoms);

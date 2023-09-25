@@ -3,14 +3,15 @@ package com.hemebiotech.analytics;
 import java.util.Map;
 
 /**
- * A writer instance used to write out symptoms on a local file
+ * A simple writer class that uses BufferedWriter to write the stream of
+ * text-type file.
  *
  */
 public interface ISymptomWriter {
     /**
-     * Writes an output file with each symptom and its occurrence
+     * Writes an output file with each symptom and its occurrence.
      *
-     * @param symptoms a pre-sorted listing of each symptom and its occurrences
+     * @param symptoms A pre-sorted listing of each unique symptom and its occurrences.
      */
     void writeSymptoms(Map<String, Integer> symptoms);
 }
