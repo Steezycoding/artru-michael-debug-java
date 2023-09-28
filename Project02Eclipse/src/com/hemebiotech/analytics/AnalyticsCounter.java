@@ -1,43 +1,77 @@
 package com.hemebiotech.analytics;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.FileWriter;
+import java.util.*;
 
+/**
+ * Process a list of symptoms (input) and write out the processed list
+ * in a human-readable file (output).
+ *
+ */
 public class AnalyticsCounter {
-	private static int headacheCount = 0;	// initialize to 0
-	private static int rashCount = 0;		// initialize to 0
-	private static int pupilCount = 0;		// initialize to 0
-	
-	public static void main(String args[]) throws Exception {
-		// first get input
-		BufferedReader reader = new BufferedReader (new FileReader("symptoms.txt"));
-		String line = reader.readLine();
 
-		int i = 0;	// set i to 0
-		int headCount = 0;	// counts headaches
-		while (line != null) {
-			i++;	// increment i
-			System.out.println("symptom from file: " + line);
-			if (line.equals("headache")) {
-				headCount++;
-				System.out.println("number of headaches: " + headCount);
-			}
-			else if (line.equals("rush")) {
-				rashCount++;
-			}
-			else if (line.contains("pupils")) {
-				pupilCount++;
-			}
+	private ISymptomReader reader;
+	private ISymptomWriter writer;
 
-			line = reader.readLine();	// get another symptom
+	/**
+	 * Instantiates:
+	 * - a reader, to read symptoms from a file
+	 * - a writer, to write out the processed list of symptoms (list of sorted, counted & unique symptoms)
+	 *
+	 * @param reader ISymptomReader interface
+	 * @param writer ISymptomWriter interface
+	 */
+	public AnalyticsCounter(ISymptomReader reader, ISymptomWriter writer) {
+		this.reader = reader;
+		this.writer = writer;
+	}
+
+	/**
+	 * Gets symptoms from input file (ISymptomReader) and stores them in a list.
+	 *
+	 * @return List of all symptoms (including duplication for each occurrence)
+	 */
+	public List<String> getSymptoms() {
+
+		return this.reader.getSymptoms();
+	}
+
+	/**
+	 * Counts the occurrences of each symptom from a list and returns a Map
+	 * of unique symptoms and their occurrences.
+	 *
+	 * @param symptoms The list of symptoms
+	 * @return Key-value paired listing of symptoms and their occurrence
+	 */
+	public Map<String, Integer> countSymptoms(List<String> symptoms) {
+
+		Map<String, Integer> symptomsOccurrences = new HashMap<String, Integer>();
+
+		for (String symptom : symptoms) {
+			if (symptomsOccurrences.containsKey(symptom)) continue;
+
+			symptomsOccurrences.put(symptom, Collections.frequency(symptoms, symptom));
 		}
-		
-		// next generate output
-		FileWriter writer = new FileWriter ("result.out");
-		writer.write("headache: " + headacheCount + "\n");
-		writer.write("rash: " + rashCount + "\n");
-		writer.write("dialated pupils: " + pupilCount + "\n");
-		writer.close();
+
+		return symptomsOccurrences;
+	}
+
+	/**
+	 * Sorts (alphabetically) a non-sorted map of symptoms.
+	 *
+	 * @param symptoms A non-sorted map of symptoms and their occurrence.
+	 * @return Key-value paired and sorted (alphabetically) listing of symptoms and their occurrence. Key is the symptom name, value is the occurrence.
+	 *
+	 */
+	public SortedMap<String, Integer> sortSymptoms(Map<String, Integer> symptoms) {
+		return new TreeMap<String, Integer>(symptoms);
+	}
+
+	/**
+	 * Outputs the list of symptoms and their occurrences in a text-type file.
+	 *
+	 * @param symptoms A map of symptoms and their occurrence.
+	 */
+	public void writeSymptoms(Map<String, Integer> symptoms) {
+		this.writer.writeSymptoms(symptoms);
 	}
 }
